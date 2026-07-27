@@ -1,0 +1,11 @@
+langgraph>=1.2.0
+langchain-core
+langchain-huggingface
+sentence-transformers
+pytest
+pytest-asyncio
+pydantic
+python-dotenv
+nest-asyncio
+grandalf
+aiosqlite

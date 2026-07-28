@@ -24,11 +24,7 @@ Bài Lab này xây dựng một trợ lý lập trình có khả năng tự ch�
 
 ```mermaid
 graph TD
-    classDef startEnd fill:#f9f,stroke:#333,stroke-width:2px,rx:20px;
-    classDef nodeStyle fill:#bbf,stroke:#333,stroke-width:1.5px;
-    classDef routerStyle fill:#ffc,stroke:#333,stroke-width:1.5px;
-
-    START([START]) -->|1. Nhập yêu cầu & Test cases| generate[Node: generate]
+    START([START]) -->|1. Nhập yêu cầu| generate[Node: generate]
     generate -->|2. Lưu mã nguồn ban đầu| evaluate[Node: evaluate]
     evaluate -->|3. Chạy thử & Kiểm tra kết quả| router{Router: route_evaluation}
     
@@ -37,10 +33,6 @@ graph TD
     router -->|Đạt giới hạn max_attempts| END
     
     revise -->|4. Lưu mã đã sửa & attempts += 1| evaluate
-
-    class START,END startEnd;
-    class generate,evaluate,revise nodeStyle;
-    class router routerStyle;
 ```
 
 ## ⚙️ Hướng dẫn khởi chạy

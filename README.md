@@ -1,17 +1,23 @@
-# 🚀 LangGraph Learning Labs
+# LangGraph Learning Labs
 
-Chào mừng bạn đến với **LangGraph Learning Labs**! Kho lưu trữ này được thiết kế để cung cấp các bài thực hành từ cơ bản đến nâng cao về xây dựng AI Agent sử dụng thư viện **LangGraph** của LangChain.
+> 🚀 Bộ bài thực hành và tài liệu nghiên cứu tự học LangGraph theo lộ trình tăng dần, từ đồ thị trạng thái cơ bản đến persistence, human-in-the-loop, streaming, RAG và multi-agent workflows.
 
----
+## 🎯 Mục tiêu tìm hiểu
 
-## 📂 Tổ chức dự án
+Repository này được tổ chức để phục vụ việc tự nghiên cứu:
+- Tìm hiểu các khái niệm cốt lõi của LangGraph qua từng lab nhỏ độc lập, dễ chạy và dễ debug.
+- Thực hành xây dựng các mẫu thiết kế Agent (Agentic Patterns) khác nhau.
+- Làm quen với cơ chế quản lý State, Reducers, Checkpointers, Memory và Streaming trong LangGraph.
+- Tích hợp kiểm thử tự động (`pytest` kết hợp mock LLM) để tối ưu hóa quy trình phát triển.
 
-Dự án được cấu trúc theo dạng mô-đun khoa học, tách biệt giữa thư viện chia sẻ chung (`shared/`), các bài lab học tập (`labs/`), ứng dụng thực tế (`projects/`), và hệ thống kiểm thử (`tests/`).
+## 📂 Cấu trúc dự án
+
+Dự án được cấu trúc dạng mô-đun để dễ dàng cô lập và quản lý các bài thực hành:
 
 ```text
 langgraph-labs/
-├── 📁 shared/                  # Cấu hình, model giả lập và helper dùng chung
-├── 📁 labs/                    # 19 bài Lab từ cơ bản đến nâng cao
+├── 📁 shared/                  # Cấu hình model và helper dùng chung (Groq, Config)
+├── 📁 labs/                    # 19 bài Lab nghiên cứu từ cơ bản đến nâng cao
 │   ├── 01_first_state_graph/   # Khởi tạo đồ thị trạng thái đơn giản nhất
 │   ├── 02_state_and_reducers/  # Xử lý cập nhật State & Reducers chuyên sâu
 │   ├── 03_edges_and_routing/   # Định tuyến điều kiện (Conditional Routing)
@@ -33,57 +39,53 @@ langgraph-labs/
 │   └── 19_production_graph/    # Đóng gói đồ thị lên sản phẩm (Production Ready)
 ├── 📁 projects/                # Các dự án mẫu ứng dụng thực tiễn
 ├── 📁 tests/                   # Kịch bản kiểm thử tự động (PyTest)
-├── 📄 requirements.txt         # Quản lý thư viện phụ thuộc
+├── 📄 requirements.txt         # Thư viện phụ thuộc
 └── 📄 pyproject.toml           # Cấu hình dự án Python chuẩn
 ```
 
----
-
-## 🛠️ Yêu cầu cài đặt
+## ⚙️ Cài đặt & Sử dụng
 
 ### 1. Chuẩn bị môi trường
-Khuyến nghị sử dụng Python phiên bản **3.10 trở lên**. Bạn nên tạo môi trường ảo trước khi cài đặt:
+Khuyến nghị sử dụng Python phiên bản **3.10 trở lên** với môi trường ảo `conda` hoặc `venv`:
 
 ```bash
-# Tạo môi trường ảo
+# Tạo và kích hoạt môi trường ảo
 python -m venv .venv
+source .venv/bin/activate  # macOS/Linux
+.venv\Scripts\activate     # Windows
 
-# Kích hoạt môi trường ảo (Windows)
-.venv\Scripts\activate
-
-# Kích hoạt môi trường ảo (macOS/Linux)
-source .venv/bin/activate
-```
-
-### 2. Cài đặt các thư viện phụ thuộc
-Cài đặt toàn bộ công cụ cần thiết từ tệp `requirements.txt`:
-
-```bash
+# Cài đặt thư viện phụ thuộc
 pip install -r requirements.txt
 ```
 
+### 2. Thiết lập biến môi trường
+Tạo file `.env` ở thư mục gốc của dự án và cấu hình các khóa API cần thiết:
+```env
+GROQ_API_KEY=your_groq_api_key
+MODEL_NAME=llama-3.1-8b-instant
+LANGCHAIN_TRACING_V2=false
+```
+
 ---
 
-## 🧪 Chạy thử nghiệm kiểm thử (Testing)
+## 🧪 Quy trình kiểm thử (Testing)
 
-Mỗi bài Lab đều đi kèm với các kịch bản kiểm thử tự động bằng **PyTest**. Bạn có thể kiểm tra tính chính xác của mã nguồn bằng cách chạy:
+Hệ thống sử dụng **pytest** để tự động kiểm thử các node và đồ thị mà không cần gọi API thật (thông qua cơ chế mock):
 
 ```bash
-# Chạy tất cả các test trong dự án
+# Chạy toàn bộ các test trong dự án
 pytest
 
-# Chạy test của một bài lab cụ thể (ví dụ Lab 01)
+# Chạy riêng bộ test của Lab 01
 pytest labs/01_first_state_graph/
 ```
 
 ---
 
-## 💡 Các tính năng nổi bật của LangGraph (v1.2+)
+## 💡 Các nội dung cốt lõi của LangGraph cần nắm vững
 
-- **State Management & Reducers**: Quản lý trạng thái Agent linh hoạt thông qua các kiểu Schema và cơ chế tích hợp dữ liệu (reducers).
-- **Persistence & Time Travel**: Tự động lưu checkpoint, cho phép khôi phục lịch sử hoặc chạy nhánh phụ (fork) bất kỳ lúc nào.
-- **Human-in-the-Loop**: Dễ dàng tích hợp bước phê duyệt hoặc điều chỉnh từ con người trước khi thực hiện tác vụ quan trọng.
-- **Multi-agent Orchestration**: Cho phép phân rã bài toán phức tạp thành nhiều đồ thị con hoạt động độc lập hoặc dưới sự chỉ đạo của Supervisor.
-
----
-⭐ *Hãy tận hưởng hành trình học tập lập trình AI Agent cùng LangGraph!*
+Trong suốt lộ trình thực hành, tập trung làm rõ các đặc trưng kỹ thuật sau của LangGraph:
+- **State & Reducers**: Cách dữ liệu tích lũy và cập nhật đè qua các node.
+- **Persistence (Checkpointers)**: Cho phép lưu trạng thái của luồng chạy để khôi phục hoặc du hành thời gian (Time Travel).
+- **Human-in-the-loop (HITL)**: Cơ chế ngắt tạm thời (Interrupt) để chờ phê duyệt hoặc bổ sung dữ liệu từ con người.
+- **Multi-agent Architectures**: Các mô hình kết nối nhiều tác nhân độc lập (Multi-agent) sử dụng Subgraphs hoặc Router.

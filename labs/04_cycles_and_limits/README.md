@@ -24,15 +24,15 @@ Bài Lab này xây dựng một trợ lý lập trình có khả năng tự ch�
 
 ```mermaid
 graph TD
-    START([START]) -->|1. Nhập yêu cầu| generate[Node: generate]
-    generate -->|2. Lưu mã nguồn ban đầu| evaluate[Node: evaluate]
-    evaluate -->|3. Chạy thử & Kiểm tra kết quả| router{Router: route_evaluation}
+    START([START]) --> generate[Generate Code]
+    generate --> evaluate[Evaluate Code]
+    evaluate --> router{Router: route_evaluation}
     
-    router -->|Đạt 100% test cases| END([END])
-    router -->|Có lỗi & attempts < max_attempts| revise[Node: revise]
-    router -->|Đạt giới hạn max_attempts| END
+    router -->|Success| END([END])
+    router -->|Error & attempts < max_attempts| revise[Revise Code]
+    router -->|Max attempts reached| END
     
-    revise -->|4. Lưu mã đã sửa & attempts += 1| evaluate
+    revise --> evaluate
 ```
 
 ## ⚙️ Hướng dẫn khởi chạy

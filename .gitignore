@@ -63,3 +63,8 @@ venv.bak/
 # OS specific files
 .DS_Store
 Thumbs.db
+
+# Sample data
+**/sample_data/*
+!**/sample_data/.gitkeep
+

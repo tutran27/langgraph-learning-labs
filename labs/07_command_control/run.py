@@ -27,7 +27,14 @@ def run_test_cases():
         "logs": [],
         "response": ""
     }
-    result_1 = graph.invoke(state_1)
+
+    config={
+    "configurable": {
+        "thread_id": "thread_1"
+    }
+}
+
+    result_1 = graph.invoke(state_1, config=config)
     print(f"Câu hỏi: {state_1['query']}")
     print("Lịch trình thực thi của Graph (Logs):")
     for log in result_1["logs"]:
@@ -47,7 +54,7 @@ def run_test_cases():
         "logs": [],
         "response": ""
     }
-    result_2 = graph.invoke(state_2)
+    result_2 = graph.invoke(state_2, config=config)
     print(f"SQL nháp ban đầu: {state_2['generated_sql']}")
     print("Lịch trình thực thi của Graph (Logs):")
     for log in result_2["logs"]:

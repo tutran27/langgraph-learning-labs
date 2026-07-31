@@ -1,15 +1,17 @@
 from unittest.mock import MagicMock, patch
 from graph import graph
 
-@patch("shared.models.GroqLLMModel")
-def test_sql_agent_success_path(mock_llm_class):
+@patch("nodes.generate_sql.GroqLLMModel")
+@patch("nodes.generate_answer.GroqLLMModel")
+def test_sql_agent_success_path(mock_generate_answer, mock_generate_sql):
     # Mock LLM trả về SQL chuẩn ngay từ đầu
     mock_llm = MagicMock()
     mock_llm.invoke.side_effect = [
         MagicMock(content="SELECT * FROM users;"),  # generate_sql
         MagicMock(content="Đây là danh sách người dùng.")  # generate_answer
     ]
-    mock_llm_class.return_value = mock_llm
+    mock_generate_sql.return_value = mock_llm
+    mock_generate_answer.return_value = mock_llm
 
     initial_state = {
         "query": "Lấy thông tin người dùng",
@@ -21,15 +23,18 @@ def test_sql_agent_success_path(mock_llm_class):
         "response": ""
     }
 
-    final_state = graph.invoke(initial_state)
+    config = {"configurable": {"thread_id": "test_success"}}
+    final_state = graph.invoke(initial_state, config=config)
 
-    assert final_state["query_result"] == "Successfully executed SQL"
+    assert "Alice" in final_state["query_result"]
     assert final_state["response"] == "Đây là danh sách người dùng."
     assert any("Executed SQL: SELECT * FROM users;" in log for log in final_state["logs"])
 
 
-@patch("shared.models.GroqLLMModel")
-def test_sql_agent_syntax_correction_path(mock_llm_class):
+@patch("nodes.generate_sql.GroqLLMModel")
+@patch("nodes.sql_corrector.GroqLLMModel")
+@patch("nodes.generate_answer.GroqLLMModel")
+def test_sql_agent_syntax_correction_path(mock_generate_answer, mock_sql_corrector, mock_generate_sql):
     # Mock LLM trả về SQL lỗi cú pháp -> sửa cú pháp -> thành công
     mock_llm = MagicMock()
     mock_llm.invoke.side_effect = [
@@ -37,7 +42,9 @@ def test_sql_agent_syntax_correction_path(mock_llm_class):
         MagicMock(content="SELECT * FROM users;"),   # sql_corrector (Đã sửa lỗi)
         MagicMock(content="Thành viên gồm Alice và Bob.")  # generate_answer
     ]
-    mock_llm_class.return_value = mock_llm
+    mock_generate_sql.return_value = mock_llm
+    mock_sql_corrector.return_value = mock_llm
+    mock_generate_answer.return_value = mock_llm
 
     initial_state = {
         "query": "Lấy thông tin người dùng",
@@ -49,16 +56,19 @@ def test_sql_agent_syntax_correction_path(mock_llm_class):
         "response": ""
     }
 
-    final_state = graph.invoke(initial_state)
+    config = {"configurable": {"thread_id": "test_syntax"}}
+    final_state = graph.invoke(initial_state, config=config)
 
-    assert final_state["query_result"] == "Successfully executed SQL"
+    assert "Alice" in final_state["query_result"]
     assert final_state["response"] == "Thành viên gồm Alice và Bob."
     assert any("Syntax error" in log for log in final_state["logs"])
     assert any("Syntax correction" in log for log in final_state["logs"])
 
 
-@patch("shared.models.GroqLLMModel")
-def test_sql_agent_table_name_correction_path(mock_llm_class):
+@patch("nodes.generate_sql.GroqLLMModel")
+@patch("nodes.schema_explorer.GroqLLMModel")
+@patch("nodes.generate_answer.GroqLLMModel")
+def test_sql_agent_table_name_correction_path(mock_generate_answer, mock_schema_explorer, mock_generate_sql):
     # Mock LLM trả về sai bảng user -> sửa thành users -> thành công
     mock_llm = MagicMock()
     mock_llm.invoke.side_effect = [
@@ -66,7 +76,9 @@ def test_sql_agent_table_name_correction_path(mock_llm_class):
         MagicMock(content="SELECT * FROM users;"),   # schema_explorer (Đã sửa sang users)
         MagicMock(content="Thông tin người dùng hợp lệ.") # generate_answer
     ]
-    mock_llm_class.return_value = mock_llm
+    mock_generate_sql.return_value = mock_llm
+    mock_schema_explorer.return_value = mock_llm
+    mock_generate_answer.return_value = mock_llm
 
     initial_state = {
         "query": "Lấy thông tin người dùng",
@@ -78,16 +90,19 @@ def test_sql_agent_table_name_correction_path(mock_llm_class):
         "response": ""
     }
 
-    final_state = graph.invoke(initial_state)
+    config = {"configurable": {"thread_id": "test_table_name"}}
+    final_state = graph.invoke(initial_state, config=config)
 
-    assert final_state["query_result"] == "Successfully executed SQL"
+    assert "Alice" in final_state["query_result"]
     assert final_state["response"] == "Thông tin người dùng hợp lệ."
     assert any("Table not found" in log for log in final_state["logs"])
     assert any("Schema explorer correction" in log for log in final_state["logs"])
 
 
-@patch("shared.models.GroqLLMModel")
-def test_sql_agent_max_retry_failure_path(mock_llm_class):
+@patch("nodes.generate_sql.GroqLLMModel")
+@patch("nodes.sql_corrector.GroqLLMModel")
+@patch("nodes.generate_answer.GroqLLMModel")
+def test_sql_agent_max_retry_failure_path(mock_generate_answer, mock_sql_corrector, mock_generate_sql):
     # Mock LLM sinh ra lỗi cú pháp liên tục và không thể tự sửa
     mock_llm = MagicMock()
     mock_llm.invoke.side_effect = [
@@ -97,7 +112,9 @@ def test_sql_agent_max_retry_failure_path(mock_llm_class):
         MagicMock(content="SELECTT * FROM users;"),  # sql_corrector (Thử lại 3)
         MagicMock(content="SELECTT * FROM users;"),  # sql_corrector (Thử lại 4)
     ]
-    mock_llm_class.return_value = mock_llm
+    mock_generate_sql.return_value = mock_llm
+    mock_sql_corrector.return_value = mock_llm
+    mock_generate_answer.return_value = mock_llm
 
     initial_state = {
         "query": "Lấy thông tin người dùng",
@@ -109,7 +126,8 @@ def test_sql_agent_max_retry_failure_path(mock_llm_class):
         "response": ""
     }
 
-    final_state = graph.invoke(initial_state)
+    config = {"configurable": {"thread_id": "test_max_retry"}}
+    final_state = graph.invoke(initial_state, config=config)
 
     # Đảm bảo đã chạy hết số lần thử tối đa, dừng lại và xuất thông báo lỗi
     assert final_state["query_result"] == ""

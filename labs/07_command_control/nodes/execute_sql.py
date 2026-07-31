@@ -40,7 +40,7 @@ def execute_sql(state):
                 return Command(
                     update={
                         "error_message": error_message,
-                        "logs": [f"Failed SQL: {generated_sql}"]
+                        "logs": [f"Syntax error: Failed SQL: {generated_sql}"]
                     },
                     goto="generate_answer"
                 ) 
@@ -48,7 +48,7 @@ def execute_sql(state):
             return Command(
                 update={
                     "error_message": error_message,
-                    "logs": [f"Failed SQL: {generated_sql}"],
+                    "logs": [f"Syntax error: Failed SQL: {generated_sql}"],
                     "retry_count": retry_count + 1
                 },
                 goto="sql_corrector"

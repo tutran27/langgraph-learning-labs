@@ -11,7 +11,7 @@ def test_execute_sql_success_updates():
     result = execute_sql(state)
     
     assert isinstance(result, Command)
-    assert result.update["query_result"] == "Successfully executed SQL"
+    assert result.update["query_result"] == "[(1,)]"
     assert "Executed SQL" in result.update["logs"][0]
 
 def test_execute_sql_syntax_error_updates():

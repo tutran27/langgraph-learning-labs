@@ -1,21 +1,45 @@
 # Lab 05 · Parallel Execution & Reducer Merge
 
-> ⚡ Chạy song song các Node độc lập (Fan-out) và gom kết quả về một Node chung (Fan-in) với Reducer trong LangGraph.
+> ⚡ Chạy song song các Node độc lập (Fan-out) và gom kết quả về một Node chung (Fan-in) với Reducer.
 
 ## 🎯 Mục tiêu
-- Hiểu mô hình Super-step trong LangGraph khi xử lý các node rẽ nhánh.
-- Áp dụng `Annotated[list, operator.add]` để tích lũy dữ liệu trả về từ nhiều node song song mà không bị ghi đè.
+
+- Hiểu mô hình Super-step khi xử lý nodes rẽ nhánh.
+- Áp dụng `Annotated[list, operator.add]` tích lũy dữ liệu song song.
 - Xây dựng luồng Fan-out / Fan-in thực tế (Phân tích cổ phiếu).
-- Kiểm chứng tốc độ cải thiện giữa chạy tuần tự và chạy song song.
+- So sánh tốc độ tuần tự vs song song.
 
-## ⚙️ Khởi chạy
+## 🔄 Sơ đồ luồng
 
-Chạy benchmark so sánh tốc độ:
-```powershell
-$env:PYTHONPATH="."; python labs/05_parallel_execution/benchmarks.py
+```mermaid
+graph TD
+    START([START]) --> FA[Financial Analysis]
+    START --> RA[Risk Analysis]
+    START --> TA[Technical Analysis]
+
+    FA --> SYN[Synthesize]
+    RA --> SYN
+    TA --> SYN
+
+    SYN --> END([END])
 ```
 
-Chạy bộ unit test tự động:
-```powershell
-$env:PYTHONPATH="."; pytest labs/05_parallel_execution/tests
+## 📂 Cấu trúc & Ý tưởng (Stock Analysis Pipeline)
+
+- **`state.py`**: `AnalysisState` với reducer tích lũy kết quả phân tích.
+- **`nodes/financial_analysis.py`**: Phân tích tài chính.
+- **`nodes/risk_analysis.py`**: Phân tích rủi ro.
+- **`nodes/technical_analysis.py`**: Phân tích kỹ thuật.
+- **`nodes/synthesize.py`**: Tổng hợp kết quả từ 3 nhánh.
+- **`graph.py`**: Đồ thị fan-out → fan-in.
+- **`benchmarks.py`**: So sánh latency tuần tự vs song song.
+
+## ⚙️ Hướng dẫn khởi chạy
+
+```bash
+python -m labs.05_parallel_execution.benchmarks
+```
+
+```bash
+python -m pytest labs/05_parallel_execution/tests -v
 ```

@@ -11,7 +11,6 @@
 
 ## 📂 Cấu trúc & Ý tưởng (AI Code Writer & Auto-Repair Agent)
 
-Bài Lab này xây dựng một trợ lý lập trình có khả năng tự chạy thử và tự động sửa mã nguồn của chính mình:
 - **`state.py`**: Định nghĩa `CodeWriterState` lưu trữ yêu cầu, test cases, mã nguồn Python hiện tại, feedback lỗi, biến đếm `attempts` và lý do dừng `stop_reason`.
 - **`nodes/generate.py`**: Node sử dụng LLM để viết mã nguồn Python ban đầu dựa trên mô tả nhiệm vụ. Chứa hàm `clean_code()` lọc bỏ các thẻ markdown.
 - **`nodes/evaluate.py`**: Trình chấm bài tự động. Chạy thực tế đoạn code bằng `exec()`, đối chiếu kết quả với test cases và bắt ngoại lệ nếu code bị crash.
@@ -20,18 +19,16 @@ Bài Lab này xây dựng một trợ lý lập trình có khả năng tự ch�
 - **`graph.py`**: Lắp ráp đồ thị tuần hoàn và biên dịch.
 - **`run.py`**: Chạy thực nghiệm tự động hóa quá trình viết và tự sửa hàm kiểm tra chuỗi đối xứng (Palindrome).
 
-## 🔄 Sơ đồ luồng hoạt động
+## 🔄 Sơ đồ luồng
 
 ```mermaid
 graph TD
-    START([START]) --> generate[Generate Code]
-    generate --> evaluate[Evaluate Code]
-    evaluate --> router{Router: route_evaluation}
-    
-    router -->|Success| END([END])
-    router -->|Error & attempts < max_attempts| revise[Revise Code]
-    router -->|Max attempts reached| END
-    
+    START([START]) --> generate[generate]
+    generate --> evaluate[evaluate]
+    evaluate --> router{route_evaluation}
+    router -->|success| END([END])
+    router -->|error| revise[revise]
+    router -->|max attempts| END
     revise --> evaluate
 ```
 

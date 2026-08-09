@@ -13,13 +13,17 @@ def generate_draft(state: WriterState) -> dict:
     topic = state.get("topic")
     outline = state.get("outline")
     
-    prompt = f"""Bạn là một nhà văn chuyên nghiệp. Dựa vào chủ đề (topic) và dàn ý (outline) đã có, hãy viết bản thảo nháp chi tiết bằng tiếng Việt.
-    
-    Chủ đề: {topic}
-    Dàn ý: {outline}
-    
-    Hãy viết trực tiếp bài viết nháp một cách chi tiết, mạch lạc, không chèn thêm các lời bình luận ngoài lề hay tiêu đề thừa khác."""
-    
+    prompt = f"""Bạn là trợ lý viết nội dung chuyên nghiệp.
+Viết bản nháp từ chủ đề và dàn ý sau.
+
+Chủ đề: {topic}
+Dàn ý: {outline}
+
+Yêu cầu:
+- Viết trực tiếp nội dung, không thêm lời dẫn hoặc giải thích.
+- Văn phong rõ ràng, tự nhiên, chuyên nghiệp.
+- Độ dài gọn: 3-5 đoạn ngắn.
+- Không dùng tiêu đề nếu người dùng không yêu cầu."""
     response = llm.invoke(prompt)
     return {"draft": response.content}
     

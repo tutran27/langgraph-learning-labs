@@ -28,15 +28,20 @@ def generate_outline(state: WriterState) -> dict:
     llm=GroqLLMModel()
     
     query=state.get("query")
-    prompt=f"""Bạn là một nhà văn chuyên nghiệp. Dựa vào yêu cầu người dùng
-    hãy xác định topic của bài viết, sau đó tạo dàn ý chi tiết cho bài viết.
-    Outline rõ ràng, đầy đủ thông tin, bố cục chuyên nghiệp
-    Đầu vào: {query}
-    Đầu ra chỉ là mã json, ko chèn thêm kí tự gì bên ngoài: {{
-        "topic":"<topic>",
-        "outline":"<outline>"
-    }} """
-    
+    prompt=f"""Bạn là trợ lý viết nội dung chuyên nghiệp.
+Xác định chủ đề và lập dàn ý ngắn gọn từ yêu cầu sau:
+{query}
+
+Yêu cầu:
+- Trả về đúng JSON hợp lệ, không thêm giải thích.
+- topic: một cụm ngắn.
+- outline: 3-5 ý chính, súc tích, dễ triển khai.
+
+Định dạng:
+{{
+  "topic": "<topic>",
+  "outline": "<outline>"
+}}"""
     response=llm.invoke(prompt)
     data=extract_json(response.content)
     if not data:

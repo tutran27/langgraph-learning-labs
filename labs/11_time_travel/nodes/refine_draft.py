@@ -13,17 +13,18 @@ def refine_draft(state: WriterState) -> dict:
     topic = state.get("topic")
     draft = state.get("draft")
     
-    prompt = f"""Bạn là một nhà biên tập văn bản có gu nghệ thuật và ngôn từ sắc sảo. Hãy tinh chỉnh và viết lại bản thảo dưới đây sao cho:
-    - Ngôn từ mượt mà, tự nhiên và gần gũi như do chính con người tự viết.
-    - Tuyệt đối tránh xa văn phong máy móc, rập khuôn hay các từ ngữ dịch thuật khiên cưỡng ("giả trân").
-    - Giữ nguyên ý chính và cảm xúc nguyên bản nhưng hành văn tự nhiên, trôi chảy, có điểm nhấn và chiều sâu hơn.
-    
-    Chủ đề: {topic}
-    Bản thảo nháp:
-    {draft}
-    
-    Hãy trả về trực tiếp văn bản sau khi đã tinh chỉnh xong, không chèn thêm bất kỳ câu dẫn dắt hay lời giải thích nào khác."""
-    
+    prompt = f"""Bạn là biên tập viên nội dung chuyên nghiệp.
+Tinh chỉnh bản nháp sau để văn bản rõ ràng, tự nhiên và gọn hơn.
+
+Chủ đề: {topic}
+Bản nháp:
+{draft}
+
+Yêu cầu:
+- Giữ nguyên ý chính và sắc thái ban đầu.
+- Loại bỏ câu thừa, diễn đạt rườm rà và văn phong máy móc.
+- Trả về trực tiếp văn bản hoàn chỉnh, không thêm nhận xét hoặc giải thích.
+- Độ dài vừa đủ, không lan man."""
     response = llm.invoke(prompt)
     return {"final_text": response.content}
 

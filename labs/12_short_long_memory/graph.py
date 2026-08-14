@@ -1,9 +1,9 @@
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
-from langgraph.store.memory import InMemoryStore
 
 from .context import Context
 from .state import State
+from .memory.store import create_memory_store
 from .nodes.chat import chat_node
 from .nodes.extract_memory import extract_memory
 from .nodes.retrieve_memory import retrieve_memory
@@ -29,10 +29,11 @@ def create_graph():
 
     return builder.compile(
         checkpointer=MemorySaver(),
-        store=InMemoryStore(),
+        store=create_memory_store(),
     )
 
 
 if __name__ == "__main__":
     app = create_graph()
     print("Graph compiled successfully!")
+

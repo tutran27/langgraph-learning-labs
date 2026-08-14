@@ -2,8 +2,9 @@ from shared.models import GroqLLMModel
 from ..state import State
 from langchain_core.messages import AIMessage, HumanMessage
 
-def chat_node(state:State):
-    llm=GroqLLMModel()
+
+def chat_node(state: State):
+    llm = GroqLLMModel()
     query = state["query"]
 
     recent_messages = state["recent_messages"]
@@ -26,21 +27,25 @@ def chat_node(state:State):
         Trả lời câu hỏi sau:
         {query}
         """
-    answer=llm.invoke(prompt)
+    answer = llm.invoke(prompt)
 
     return {
-    "answer": answer.content,
-    "messages": [
-        HumanMessage(content=query),
-        AIMessage(content=answer.content),
-    ],
-}
+        "answer": answer.content,
+        "messages": [
+            HumanMessage(content=query),
+            AIMessage(content=answer.content),
+        ],
+    }
 
-if __name__=="__main__":
-    state=State(
+
+if __name__ == "__main__":
+    state = State(
         query="xin chào",
         answer="",
-        messages=[]
+        messages=[],
+        retrieved_memories="",
+        summary="",
+        recent_messages="",
     )
-    state=chat_node(state)
-    print(state)
+    state = chat_node(state)
+    print(state)

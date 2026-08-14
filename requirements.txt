@@ -14,3 +14,4 @@ grandalf
 aiosqlite
 langchain-groq
 langchain
+langchain-tavily

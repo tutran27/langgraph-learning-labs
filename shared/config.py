@@ -6,5 +6,6 @@ class Settings:
     MODEL_NAME = os.getenv("MODEL_NAME", "llama3.1-8b-instant")
     HF_TOKEN = os.getenv("HF_TOKEN")
     GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+    TAVILY_API_KEY = os.getenv("TAVILY_API_KEY", "")
 
 settings = Settings()

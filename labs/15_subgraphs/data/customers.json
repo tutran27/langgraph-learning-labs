@@ -1,0 +1,25 @@
+{
+  "customers": {
+    "an.nguyen@email.com": {
+      "verified": true,
+      "vip": true,
+      "registered_since": "2023-05-10"
+    },
+    "bich.tran@email.com": {
+      "verified": true,
+      "vip": true,
+      "registered_since": "2021-01-15"
+    },
+    "cuong.le@email.com": {
+      "verified": false,
+      "vip": false,
+      "registered_since": "2025-12-01"
+    },
+    "spam@fake.com": {
+      "verified": false,
+      "vip": false,
+      "registered_since": null,
+      "_note": "Khách hàng chưa xác minh → validation fail"
+    }
+  }
+}

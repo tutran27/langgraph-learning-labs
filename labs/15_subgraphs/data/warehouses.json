@@ -1,0 +1,29 @@
+{
+  "warehouses": {
+    "WH-SGN-01": {
+      "name": "Kho Sài Gòn 1",
+      "city": "TP.HCM",
+      "carriers": ["GHN", "GHTK", "VNPost"]
+    },
+    "WH-SGN-02": {
+      "name": "Kho Sài Gòn 2",
+      "city": "TP.HCM",
+      "carriers": ["GHN", "J&T Express"]
+    },
+    "WH-HN-01": {
+      "name": "Kho Hà Nội 1",
+      "city": "Hà Nội",
+      "carriers": ["VNPost", "Viettel Post", "GHN"]
+    },
+    "WH-DN-01": {
+      "name": "Kho Đà Nẵng 1",
+      "city": "Đà Nẵng",
+      "carriers": ["GHTK", "VNPost"]
+    }
+  },
+  "delivery_estimates": {
+    "same_city": "1-2 ngày",
+    "nearby_city": "2-3 ngày",
+    "remote": "4-7 ngày"
+  }
+}

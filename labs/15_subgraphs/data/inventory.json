@@ -1,0 +1,12 @@
+{
+  "inventory": {
+    "Laptop Dell XPS 15": {"stock": 10, "warehouse": "WH-SGN-01"},
+    "Chuột Logitech MX Master": {"stock": 50, "warehouse": "WH-SGN-01"},
+    "iPhone 15 Pro Max": {"stock": 5, "warehouse": "WH-HN-01"},
+    "Tai nghe Sony WH-1000XM5": {"stock": 0, "warehouse": "WH-DN-01"},
+    "Bàn phím Keychron K2": {"stock": 25, "warehouse": "WH-SGN-02"},
+    "MacBook Pro M3": {"stock": 3, "warehouse": "WH-HN-01"},
+    "Samsung Galaxy S24 Ultra": {"stock": 15, "warehouse": "WH-SGN-01"}
+  },
+  "_note": "Sony WH-1000XM5 có stock = 0 → ORD-003 sẽ fail inventory check"
+}
